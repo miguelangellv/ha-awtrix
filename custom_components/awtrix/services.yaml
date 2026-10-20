@@ -8,8 +8,13 @@ settings:
       description: The Awtrix device to configure.
       selector:
         device:
-          manufacturer: Blueforcer
-          model: AWTRIX 3
+          filter:
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX 3
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX NG
     ATIME:
       name: "App Display Duration"
       description: "Duration (in seconds) an app is displayed."
@@ -288,6 +293,158 @@ settings:
             - thunder
             - frost
 
+    # AWTRIX NG settings (sent as-is to AWTRIX NG devices)
+    AWTRIX NG Settings:
+      collapsed: true
+      fields:
+        brightness:
+          name: "Brightness"
+          description: "Panel brightness, raw level 0-255 (ignored while auto brightness is on). AWTRIX NG only."
+          example: 120
+          selector:
+            number:
+              min: 0
+              max: 255
+              mode: slider
+        saturation:
+          name: "Saturation"
+          description: "Colourfulness in percent; 0 shows everything in grey. AWTRIX NG only."
+          example: 100
+          selector:
+            number:
+              min: 0
+              max: 100
+              mode: slider
+        autoBrightness:
+          name: "Auto Brightness"
+          description: "Let the light sensor drive the brightness. AWTRIX NG only."
+          selector:
+            boolean: {}
+        appDurationMs:
+          name: "App Duration (ms)"
+          description: "How long each app is shown. AWTRIX NG only."
+          example: 7000
+          selector:
+            number:
+              min: 0
+              mode: box
+              unit_of_measurement: ms
+        autoTransition:
+          name: "Auto Transition"
+          description: "Rotate through the apps automatically. AWTRIX NG only."
+          selector:
+            boolean: {}
+        transitionEffect:
+          name: "Transition Effect"
+          description: "Animation played when the rotation changes app. AWTRIX NG only."
+          example: "Slide"
+          selector:
+            select:
+              mode: dropdown
+              options:
+                - Random
+                - Slide
+                - Dim
+                - Zoom
+                - Rotate
+                - Pixelate
+                - Curtain
+                - Ripple
+                - Blink
+                - Reload
+                - Fade
+                - Cover
+                - Uncover
+                - Split
+                - Blinds
+                - Blocks
+                - Flash
+                - Diamond
+                - Wave
+                - Rain
+                - Melt
+                - Interlace
+        transitionDirection:
+          name: "Transition Direction"
+          description: "Mirror direction-aware transitions. AWTRIX NG only."
+          selector:
+            select:
+              options:
+                - normal
+                - reverse
+        transitionDurationMs:
+          name: "Transition Duration (ms)"
+          description: "Length of the transition animation, 0 = instant. AWTRIX NG only."
+          example: 1000
+          selector:
+            number:
+              min: 0
+              mode: box
+              unit_of_measurement: ms
+        timeMode:
+          name: "Clock Style"
+          description: "Clock layout 0-6 (0 centred, 1-4 calendar box variants, 5 big clock, 6 binary clock). AWTRIX NG only."
+          selector:
+            number:
+              min: 0
+              max: 6
+              mode: box
+        time24h:
+          name: "24-hour Clock"
+          description: "Use a 24-hour clock. AWTRIX NG only."
+          selector:
+            boolean: {}
+        timeShowSeconds:
+          name: "Show Seconds"
+          description: "Append :SS to the time. AWTRIX NG only."
+          selector:
+            boolean: {}
+        timeSeparatorMode:
+          name: "Clock Separator"
+          description: "Behaviour of the colon between hours and minutes. AWTRIX NG only."
+          selector:
+            select:
+              options:
+                - steady
+                - blink
+                - pulse
+        useCelsius:
+          name: "Use Celsius"
+          description: "Show temperatures in Celsius. AWTRIX NG only."
+          selector:
+            boolean: {}
+        soundEnabled:
+          name: "Sound Enabled"
+          description: "Mute switch for one-shot sounds. AWTRIX NG only."
+          selector:
+            boolean: {}
+        buzzerVolume:
+          name: "Buzzer Volume"
+          description: "Buzzer volume in percent. AWTRIX NG only."
+          selector:
+            number:
+              min: 0
+              max: 100
+              mode: slider
+        radioVolume:
+          name: "Radio Volume"
+          description: "Internet radio volume in percent. AWTRIX NG only."
+          selector:
+            number:
+              min: 0
+              max: 100
+              mode: slider
+        scroll:
+          name: "Text Scrolling"
+          description: 'Device-wide text motion, e.g. {"mode":"loop","speed":80,"direction":"left"}. AWTRIX NG only.'
+          selector:
+            object: {}
+        weekdayBar:
+          name: "Weekday Bar"
+          description: 'Weekday bar options, e.g. {"show":true,"startOnMonday":true}. AWTRIX NG only.'
+          selector:
+            object: {}
+
 dismiss:
   name: Dismiss Custom notification
   description: Dismiss the current notification on the Awtrix display.
@@ -298,8 +455,20 @@ dismiss:
       description: The Awtrix device to clear the notification on.
       selector:
         device:
-          manufacturer: Blueforcer
-          model: AWTRIX 3
+          filter:
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX 3
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX NG
+
+    name:
+      name: Notification name
+      description: "Dismiss only the notification that was sent with this name. AWTRIX NG only; leave empty to dismiss the active one."
+      example: "backup-job"
+      selector:
+        text: {}
 
 notification:
   name: Display Custom notification
@@ -311,8 +480,13 @@ notification:
       description: The Awtrix device to send the notification to.
       selector:
         device:
-          manufacturer: Blueforcer
-          model: AWTRIX 3
+          filter:
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX 3
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX NG
     # Notification Global params
     Notification Global Parameters:
       collapsed: true
@@ -663,6 +837,89 @@ notification:
             text:
               multiline: true 
 
+    # AWTRIX NG options (AWTRIX 3 devices ignore or reject these)
+    AWTRIX NG Parameters:
+      collapsed: true
+      fields:
+        name:
+          name: "Notification Name"
+          description: "Label used to dismiss this notification later with the Dismiss action. AWTRIX NG only."
+          example: "backup-job"
+          selector:
+            text: {}
+        textColor:
+          name: "Text Color (NG)"
+          description: "Text colour, or the word palette to paint the text from the palette. AWTRIX NG only."
+          selector:
+            text: {}
+        font:
+          name: "Font"
+          description: "Panel font; large is seven rows tall. AWTRIX NG only."
+          selector:
+            select:
+              options:
+                - small
+                - large
+        effectSpeed:
+          name: "Effect Speed"
+          description: "Pace multiplier for the effect and overlay of this app (0.1-10). AWTRIX NG only."
+          example: 1.0
+          selector:
+            number:
+              min: 0.1
+              max: 10
+              step: 0.1
+              mode: box
+        palette:
+          name: "Palette"
+          description: "Built-in palette name (Cloud, Lava, Ocean, Forest, Stripe, Party, Heat, Rainbow) or a list of colour stops. AWTRIX NG only."
+          example: "Lava"
+          selector:
+            object: {}
+        paletteBlend:
+          name: "Blend Palette"
+          description: "Interpolate between palette entries instead of hard bands. AWTRIX NG only."
+          selector:
+            boolean: {}
+        paletteSpan:
+          name: "Palette Span"
+          description: "Pixels per full palette pass when painting text, 0 = stretch. AWTRIX NG only."
+          selector:
+            number:
+              min: 0
+              mode: box
+        paletteSpeed:
+          name: "Palette Speed"
+          description: "Palette passes per second when painting text, 0 = still. AWTRIX NG only."
+          selector:
+            number:
+              min: 0
+              max: 10
+              step: 0.1
+              mode: box
+        iconMode:
+          name: "Icon Mode"
+          description: "Whether approaching text shoves the icon aside. AWTRIX NG only."
+          selector:
+            select:
+              options:
+                - fixed
+                - pushOnce
+                - push
+        scroll:
+          name: "Text Scrolling"
+          description: 'Per-app text motion, e.g. {"mode":"bounce","speed":80}. AWTRIX NG only.'
+          selector:
+            object: {}
+        durationMs:
+          name: "Display Duration (ms)"
+          description: "Same as Display Duration but in milliseconds. AWTRIX NG only."
+          selector:
+            number:
+              min: 0
+              mode: box
+              unit_of_measurement: ms
+
 custom_app:
   name: Display Custom app
   description: Send a custom message to the Awtrix display.
@@ -673,8 +930,13 @@ custom_app:
       description: The Awtrix device to update the custom app.
       selector:
         device:
-          manufacturer: Blueforcer
-          model: AWTRIX 3
+          filter:
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX 3
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX NG
     
     # Custom App Global params
     Custom App Global Parameters:
@@ -1004,6 +1266,83 @@ custom_app:
             text:
               multiline: true  
 
+    # AWTRIX NG options (AWTRIX 3 devices ignore or reject these)
+    AWTRIX NG Parameters:
+      collapsed: true
+      fields:
+        textColor:
+          name: "Text Color (NG)"
+          description: "Text colour, or the word palette to paint the text from the palette. AWTRIX NG only."
+          selector:
+            text: {}
+        font:
+          name: "Font"
+          description: "Panel font; large is seven rows tall. AWTRIX NG only."
+          selector:
+            select:
+              options:
+                - small
+                - large
+        effectSpeed:
+          name: "Effect Speed"
+          description: "Pace multiplier for the effect and overlay of this app (0.1-10). AWTRIX NG only."
+          example: 1.0
+          selector:
+            number:
+              min: 0.1
+              max: 10
+              step: 0.1
+              mode: box
+        palette:
+          name: "Palette"
+          description: "Built-in palette name (Cloud, Lava, Ocean, Forest, Stripe, Party, Heat, Rainbow) or a list of colour stops. AWTRIX NG only."
+          example: "Lava"
+          selector:
+            object: {}
+        paletteBlend:
+          name: "Blend Palette"
+          description: "Interpolate between palette entries instead of hard bands. AWTRIX NG only."
+          selector:
+            boolean: {}
+        paletteSpan:
+          name: "Palette Span"
+          description: "Pixels per full palette pass when painting text, 0 = stretch. AWTRIX NG only."
+          selector:
+            number:
+              min: 0
+              mode: box
+        paletteSpeed:
+          name: "Palette Speed"
+          description: "Palette passes per second when painting text, 0 = still. AWTRIX NG only."
+          selector:
+            number:
+              min: 0
+              max: 10
+              step: 0.1
+              mode: box
+        iconMode:
+          name: "Icon Mode"
+          description: "Whether approaching text shoves the icon aside. AWTRIX NG only."
+          selector:
+            select:
+              options:
+                - fixed
+                - pushOnce
+                - push
+        scroll:
+          name: "Text Scrolling"
+          description: 'Per-app text motion, e.g. {"mode":"bounce","speed":80}. AWTRIX NG only.'
+          selector:
+            object: {}
+        durationMs:
+          name: "Display Duration (ms)"
+          description: "Same as Display Duration but in milliseconds. AWTRIX NG only."
+          selector:
+            number:
+              min: 0
+              mode: box
+              unit_of_measurement: ms
+
 delete_custom_app:
   name: Delete Custom app
   description: Remove custom app from the Awtrix device.
@@ -1014,8 +1353,13 @@ delete_custom_app:
       description: The Awtrix device to delete the custom app.
       selector:
         device:
-          manufacturer: Blueforcer
-          model: AWTRIX 3
+          filter:
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX 3
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX NG
     app:
       name: App Name
       required: true
@@ -1033,8 +1377,13 @@ deep_sleep:
       description: The Awtrix device to put into deep sleep mode.
       selector:
         device:
-          manufacturer: Blueforcer
-          model: AWTRIX 3
+          filter:
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX 3
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX NG
     sleep:
       name: Seconds to sleep
       description: "Number of seconds to sleep"
@@ -1054,8 +1403,13 @@ switch_app:
       description: The Awtrix device to switch apps on.
       selector:
         device:
-          manufacturer: Blueforcer
-          model: AWTRIX 3
+          filter:
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX 3
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX NG
     name:
       name: App Name
       required: true
@@ -1063,3 +1417,405 @@ switch_app:
       example: "Time"
       selector:
         text: {}
+    fast:
+      name: Switch instantly
+      description: "Skip the transition animation. AWTRIX NG only."
+      selector:
+        boolean: {}
+
+next_app:
+  name: Next App
+  description: "Switch the display to the next app."
+  fields:
+    device:
+      name: Awtrix device
+      required: true
+      description: The Awtrix device to control.
+      selector:
+        device:
+          filter:
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX 3
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX NG
+
+previous_app:
+  name: Previous App
+  description: "Switch the display to the previous app."
+  fields:
+    device:
+      name: Awtrix device
+      required: true
+      description: The Awtrix device to control.
+      selector:
+        device:
+          filter:
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX 3
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX NG
+
+power:
+  name: Matrix Power
+  description: "Turn the LED matrix on or off."
+  fields:
+    device:
+      name: Awtrix device
+      required: true
+      description: The Awtrix device to control.
+      selector:
+        device:
+          filter:
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX 3
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX NG
+    power:
+      name: Power
+      required: true
+      description: "true turns the matrix on, false turns it off."
+      example: true
+      selector:
+        boolean: {}
+
+overlay:
+  name: Weather Overlay
+  description: "Set the device-wide weather overlay (rain, snow, drizzle, storm, thunder, frost) or clear it."
+  fields:
+    device:
+      name: Awtrix device
+      required: true
+      description: The Awtrix device to control.
+      selector:
+        device:
+          filter:
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX 3
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX NG
+    overlay:
+      name: Overlay
+      required: true
+      description: "Overlay to draw on top of every page; clear removes it."
+      example: "rain"
+      selector:
+        select:
+          mode: dropdown
+          options:
+            - clear
+            - snow
+            - rain
+            - drizzle
+            - storm
+            - thunder
+            - frost
+
+moodlight:
+  name: Moodlight
+  description: "Turn the moodlight on with a colour or off."
+  fields:
+    device:
+      name: Awtrix device
+      required: true
+      description: The Awtrix device to control.
+      selector:
+        device:
+          filter:
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX 3
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX NG
+    enabled:
+      name: Enabled
+      description: "Set to false to turn the moodlight off; the other fields are then ignored."
+      default: true
+      selector:
+        boolean: {}
+    color:
+      name: Color
+      description: "Moodlight colour."
+      selector:
+        color_rgb: {}
+    brightness:
+      name: Brightness
+      description: "Moodlight brightness (0-255)."
+      example: 120
+      selector:
+        number:
+          min: 0
+          max: 255
+          mode: slider
+    kelvin:
+      name: Color temperature
+      description: "Colour temperature in Kelvin. Awtrix 3 only; ignored by AWTRIX NG."
+      example: 3000
+      selector:
+        number:
+          min: 2000
+          max: 6500
+          mode: box
+          unit_of_measurement: K
+
+indicator:
+  name: Indicator
+  description: "Control one of the three indicator pixels on the right edge of the display."
+  fields:
+    device:
+      name: Awtrix device
+      required: true
+      description: The Awtrix device to control.
+      selector:
+        device:
+          filter:
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX 3
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX NG
+    indicator:
+      name: Indicator
+      required: true
+      description: "Which indicator: 1 top, 2 middle, 3 bottom."
+      example: 1
+      selector:
+        number:
+          min: 1
+          max: 3
+          mode: box
+    enabled:
+      name: Enabled
+      description: "Set to false to turn the indicator off; the other fields are then ignored."
+      default: true
+      selector:
+        boolean: {}
+    color:
+      name: Color
+      description: "Indicator colour."
+      selector:
+        color_rgb: {}
+    blink:
+      name: Blink period
+      description: "Blink period in milliseconds, 0 = solid."
+      example: 500
+      selector:
+        number:
+          min: 0
+          max: 65535
+          mode: box
+          unit_of_measurement: ms
+    fade:
+      name: Fade period
+      description: "Fade period in milliseconds, 0 = no fade."
+      example: 500
+      selector:
+        number:
+          min: 0
+          max: 65535
+          mode: box
+          unit_of_measurement: ms
+
+play_sound:
+  name: Play Sound
+  description: "Play a sound. Give exactly one of the fields below."
+  fields:
+    device:
+      name: Awtrix device
+      required: true
+      description: The Awtrix device to control.
+      selector:
+        device:
+          filter:
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX 3
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX NG
+    sound:
+      name: Sound
+      description: "Name of a stored sound or melody (on AWTRIX NG also a plain DFPlayer track number)."
+      example: "beep"
+      selector:
+        text: {}
+    rtttl:
+      name: RTTTL melody
+      description: "Inline RTTTL melody played on the buzzer."
+      example: "two:d=4,o=5,b=200:c,e"
+      selector:
+        text: {}
+    mp3:
+      name: MP3
+      description: "Stored MP3 to play. AWTRIX NG only."
+      selector:
+        text: {}
+    melody:
+      name: Melody
+      description: "Stored melody to play. AWTRIX NG only."
+      selector:
+        text: {}
+    track:
+      name: DFPlayer track
+      description: "Track number on the DFPlayer SD card (1-2999). AWTRIX NG only."
+      selector:
+        number:
+          min: 1
+          max: 2999
+          mode: box
+    station:
+      name: Radio station
+      description: "Stored radio station to start. AWTRIX NG only."
+      selector:
+        text: {}
+    index:
+      name: Radio station index
+      description: "Position in the radio station list (0-31). AWTRIX NG only."
+      selector:
+        number:
+          min: 0
+          max: 31
+          mode: box
+    url:
+      name: Stream URL
+      description: "http(s) radio stream that is not stored. AWTRIX NG only."
+      selector:
+        text: {}
+
+stop_sound:
+  name: Stop Sound
+  description: "Stop playing sounds and/or the radio stream. AWTRIX NG only."
+  fields:
+    device:
+      name: Awtrix device
+      required: true
+      description: The Awtrix device to control.
+      selector:
+        device:
+          filter:
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX 3
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX NG
+    scope:
+      name: Scope
+      description: "What to stop; everything when left empty."
+      selector:
+        select:
+          options:
+            - sounds
+            - stream
+            - all
+
+reboot:
+  name: Reboot
+  description: "Reboot the device."
+  fields:
+    device:
+      name: Awtrix device
+      required: true
+      description: The Awtrix device to control.
+      selector:
+        device:
+          filter:
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX 3
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX NG
+
+update_firmware:
+  name: Update Firmware
+  description: "Start the over-the-air firmware update. Awtrix 3 only."
+  fields:
+    device:
+      name: Awtrix device
+      required: true
+      description: The Awtrix device to control.
+      selector:
+        device:
+          filter:
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX 3
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX NG
+
+app_order:
+  name: App Order
+  description: "Set the order of the apps in the rotation and which are switched off."
+  fields:
+    device:
+      name: Awtrix device
+      required: true
+      description: The Awtrix device to control.
+      selector:
+        device:
+          filter:
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX 3
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX NG
+    order:
+      name: Order
+      description: "App names in the order they should run. Leave empty to keep the current order."
+      example: '["Time", "weather", "Date"]'
+      selector:
+        object: {}
+    disabled:
+      name: Disabled apps
+      description: "App names to switch off."
+      example: '["Battery"]'
+      selector:
+        object: {}
+
+reset_settings:
+  name: Reset Settings
+  description: "Clear the stored settings and reboot. AWTRIX NG only."
+  fields:
+    device:
+      name: Awtrix device
+      required: true
+      description: The Awtrix device to control.
+      selector:
+        device:
+          filter:
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX 3
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX NG
+
+get_screen:
+  name: Get Screen
+  description: "Ask the device to publish its current screen to the <prefix>/state/screen MQTT topic. AWTRIX NG only."
+  fields:
+    device:
+      name: Awtrix device
+      required: true
+      description: The Awtrix device to control.
+      selector:
+        device:
+          filter:
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX 3
+            - integration: mqtt
+              manufacturer: Blueforcer
+              model: AWTRIX NG
